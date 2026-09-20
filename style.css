@@ -582,19 +582,25 @@ p {
 
 }
 
-/* ================= CHEF ================= */
-
+    /* ================= CHEF ================= */
 .chef {
-    background: #101010;
+    position: relative;
+
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.78),
+            rgba(0, 0, 0, 0.78)
+        ),
+        url("imagens/fundo-chef.jpg")
+            center / cover no-repeat;
 }
 
-.chef-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.chef-content {
+    max-width: 850px;
 
-    gap: 100px;
+    margin: 0 auto;
 
-    align-items: center;
+    text-align: center;
 }
 
 .chef-content h2 {
@@ -603,66 +609,36 @@ p {
 
 .chef-quote {
     color: white;
+
     font-family: "Cinzel", serif;
 
     font-size: 20px;
+
     line-height: 1.7;
 
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 
-    border-left: 2px solid var(--red);
-    padding-left: 20px;
+    padding: 0 20px;
+
+    border-left: none;
 }
 
-.chef-content p {
-    margin-bottom: 18px;
+.chef-content blockquote {
+    max-width: 750px;
+
+    margin: 0 auto;
+
+    color: #ccc;
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+    font-style: italic;
+
+    padding: 0 20px;
 }
 
-.chef-signature {
-    font-family: "Cinzel", serif;
-    font-size: 28px;
-    color: var(--gold);
-
-    margin-top: 30px;
-}
-
-.chef-image {
-    position: relative;
-}
-
-.chef-image img {
-    aspect-ratio: 4/5;
-    object-fit: cover;
-}
-
-.chef-badge {
-    position: absolute;
-
-    bottom: 25px;
-    left: -25px;
-
-    width: 100px;
-    height: 100px;
-
-    background: var(--red);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-direction: column;
-}
-
-.chef-badge span {
-    font-family: "Cinzel", serif;
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.chef-badge small {
-    font-size: 8px;
-    letter-spacing: 2px;
-}
 
 
 /* ================= MENU ================= */
@@ -1015,6 +991,7 @@ p {
     .choice-grid span {
         font-size: 10px;
     }
+}
 @media (max-width: 768px) {
 
     .gallery-grid {
@@ -1023,8 +1000,44 @@ p {
     }
 
 }
-}
+/* ================= AVALIAÇÕES - MOBILE ================= */
 
+@media (max-width: 600px) {
+
+    .approved-reviews {
+        display: grid;
+        grid-template-columns: 1fr !important;
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .approved-review {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 20px;
+    }
+
+    .approved-review-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .approved-review-stars {
+        font-size: 20px;
+        letter-spacing: 2px;
+    }
+
+    .approved-reviews-header {
+        margin-top: 50px;
+        margin-bottom: 20px;
+    }
+
+    .approved-reviews-header h3 {
+        font-size: 23px;
+    }
+
+}
 /* ================= DELIVERY ================= */
 
 .delivery {
@@ -1089,14 +1102,30 @@ box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
 }
 
 .hours-icon {
-font-size: 30px;
-text-align: center;
+    width: 32px;
+    height: 32px;
 
-margin-bottom: 30px;
+    margin: 0 auto 30px;
 
-color: #ff6b00;
+    color: var(--red);
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.hours-icon svg {
+    width: 100%;
+    height: 100%;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
 
 .hours-list > div {
 display: flex;
@@ -1130,45 +1159,237 @@ font-size: 14px;
 
 
 
-/* ================= TESTIMONIALS ================= */
+/* ================= AVALIAÇÕES ================= */
 
-.testimonials {
-    background: var(--black);
+.reviews {
+    background: #101010;
 }
 
-.testimonial-grid {
+.reviews .section-header p {
+    max-width: 600px;
+
+    margin: 15px auto 0;
+
+    color: #aaa;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+
+/* ================= FORMULÁRIO ================= */
+
+.review-form-container {
+    max-width: 650px;
+
+    margin: 50px auto 0;
+
+    padding: 35px;
+
+    background: rgba(255, 255, 255, 0.03);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 8px;
+}
+
+.review-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.form-group label {
+    color: #fff;
+
+    font-size: 14px;
+
+    font-weight: 500;
+}
+
+
+/* ================= CAMPOS ================= */
+
+.review-form input,
+.review-form textarea {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 5px;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    color: #fff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+.review-form textarea {
+    resize: vertical;
+
+    min-height: 130px;
+}
+
+.review-form input::placeholder,
+.review-form textarea::placeholder {
+    color: #777;
+}
+
+.review-form input:focus,
+.review-form textarea:focus {
+    border-color: var(--red);
+
+    box-shadow: 0 0 0 2px rgba(255, 81, 0, 0.08);
+}
+
+
+/* ================= ESTRELAS ================= */
+
+.rating {
+    display: flex;
+
+    gap: 6px;
+}
+
+.rating button {
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #555;
+
+    font-size: 27px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition: color 0.2s ease,
+                transform 0.2s ease;
+}
+
+.rating button:hover {
+    color: var(--red);
+
+    transform: scale(1.08);
+}
+
+.rating button.active {
+    color: var(--red);
+}
+
+
+/* ================= BOTÃO ================= */
+
+.review-submit {
+    align-self: center;
+
+    margin-top: 5px;
+
+    border: none;
+
+    cursor: pointer;
+}
+ /* ================= AVALIAÇÕES APROVADAS ================= */
+
+.approved-reviews {
+    max-width: 900px;
+    margin: 60px auto 0;
     display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
-.testimonial {
-    background: var(--black-card);
-
-    padding: 35px;
+.approved-review {
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    transition: border-color 0.3s ease,
+                transform 0.3s ease;
 }
 
-.stars {
-    color: var(--gold);
-
-    letter-spacing: 4px;
-
-    margin-bottom: 20px;
+.approved-review:hover {
+    border-color: rgba(255, 81, 0, 0.35);
+    transform: translateY(-3px);
 }
 
-.testimonial p {
+.approved-review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.approved-review-header strong {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.approved-review-stars {
+    color: var(--red);
+    font-size: 22px;
+    letter-spacing: 3px;
+    white-space: nowrap;
+}
+
+.approved-review p {
+    margin: 0;
+    color: #aaa;
     font-size: 14px;
-
-    margin-bottom: 25px;
+    line-height: 1.7;
+}
+.approved-review-date {
+    display: block;
+    margin-top: 14px;
+    color: #666;
+    font-size: 12px;
 }
 
-.testimonial strong {
+/* ================= CABEÇALHO DAS AVALIAÇÕES ================= */
+
+.approved-reviews-header {
+    max-width: 900px;
+    margin: 65px auto 25px;
+    text-align: center;
+}
+
+.approved-reviews-header h3 {
+    margin-top: 10px;
+    color: #fff;
     font-family: "Cinzel", serif;
+    font-size: 28px;
+    font-weight: 400;
 }
 
-
+.approved-reviews-header h3 span {
+    color: var(--red);
+}
 /* =========================
    LOCALIZAÇÃO
 ========================= */

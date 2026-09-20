@@ -2,7 +2,17 @@
    AKI TEMAKERIA
    SCRIPT.JS
 ================================================== */
+// ================= SUPABASE =================
 
+const SUPABASE_URL = "https://dndcjwnyuqkznzjrldwz.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_RNTe7dYz8ypSqsrQff1HUA_qFCqkjOi";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
 
 /* ================= MENU MOBILE ================= */
 
@@ -174,7 +184,7 @@ if (yearElements.length > 0) {
     traços
 */
 
-const whatsappNumber = "5500000000000";
+const whatsappNumber = "5584991841279";
 
 const whatsappMessage =
     "Olá! Vim pelo site da Aki Temakeria e gostaria de fazer um pedido.";
@@ -339,6 +349,7 @@ if (
     lightboxNext.addEventListener("click", (event) => {
 
         event.stopPropagation();
+        showLightboxMedia(currentLightboxIndex + 1);
 
 
         
@@ -411,8 +422,149 @@ if (
 
         }
 
-    }); 
+   
+});  
 
 }
 
 }
+
+// ================= AVALIAÇÃO POR ESTRELAS =================
+
+const ratingButtons = document.querySelectorAll("#rating button");
+
+let selectedRating = 0;
+
+ratingButtons.forEach((button) => {
+
+    button.addEventListener("click", () => {
+
+        const clickedRating = Number(button.dataset.rating);
+
+        // Se clicar novamente na mesma estrela, limpa a avaliação
+        if (selectedRating === clickedRating) {
+            selectedRating = 0;
+        } else {
+            selectedRating = clickedRating;
+        }
+
+        ratingButtons.forEach((star) => {
+
+            const starRating = Number(star.dataset.rating);
+
+            if (starRating <= selectedRating) {
+                star.classList.add("active");
+            } else {
+                star.classList.remove("active");
+            }
+
+        });
+
+    });
+});
+
+
+// ================= ENVIO DA AVALIAÇÃO =================
+
+const reviewForm = document.getElementById("review-form");
+const reviewName = document.getElementById("review-name");
+const reviewMessage = document.getElementById("review-message");
+
+let enviandoAvaliacao = false;
+
+reviewForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    if (enviandoAvaliacao) {
+        return;
+    }
+
+    if (selectedRating === 0) {
+        alert("Selecione uma nota de 1 a 5 estrelas.");
+        return;
+    }
+
+    enviandoAvaliacao = true;
+
+    const { error } = await supabaseClient
+        .from("avaliacoes")
+        .insert([
+            {
+                nome: reviewName.value.trim(),
+                nota: selectedRating,
+                comentario: reviewMessage.value.trim(),
+                status: "pendente",
+                created_at: new Date().toISOString()
+            }
+        ]);
+
+    if (error) {
+        console.error("Erro ao enviar avaliação:", error);
+        alert("Não foi possível enviar sua avaliação. Tente novamente.");
+        enviandoAvaliacao = false;
+        return;
+    }
+
+    alert("Obrigado pela sua avaliação!");
+
+    reviewForm.reset();
+
+    selectedRating = 0;
+
+    ratingButtons.forEach((star) => {
+        star.classList.remove("active");
+    });
+
+    enviandoAvaliacao = false;
+});
+
+// ================= CARREGAR AVALIAÇÕES APROVADAS =================
+
+const approvedReviews = document.getElementById("approved-reviews");
+
+async function carregarAvaliacoes() {
+
+    if (!approvedReviews) {
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("avaliacoes")
+        .select("nome, nota, comentario, created_at")
+        .eq("status", "aprovada")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Erro ao carregar avaliações:", error);
+        return;
+    }
+
+    approvedReviews.innerHTML = "";
+
+    data.forEach((avaliacao) => {
+
+        const review = document.createElement("div");
+        review.classList.add("approved-review");
+
+        const stars = "★".repeat(avaliacao.nota);
+        const dataFormatada = new Date(avaliacao.created_at).toLocaleDateString(
+    "pt-BR"
+);
+review.innerHTML = `
+    <div class="approved-review-header">
+        <strong>${avaliacao.nome}</strong>
+        <span class="approved-review-stars">${stars}</span>
+    </div>
+
+    <p>${avaliacao.comentario}</p>
+
+    <small class="approved-review-date">${dataFormatada}</small>
+`;
+        approvedReviews.appendChild(review);
+
+    });
+
+}
+
+carregarAvaliacoes();
