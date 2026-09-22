@@ -1,32 +1,42 @@
+
 /* ==================================================
    AKI TEMAKERIA
    SCRIPT.JS
 ================================================== */
-// ================= SUPABASE =================
+
+
+/* ================= SUPABASE ================= */
 
 const SUPABASE_URL = "https://dndcjwnyuqkznzjrldwz.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_RNTe7dYz8ypSqsrQff1HUA_qFCqkjOi";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+let supabaseClient = null;
+
+if (window.supabase) {
+    supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+}
+
 
 /* ================= MENU MOBILE ================= */
 
 const menuToggle = document.getElementById("menu-toggle");
 const nav = document.getElementById("nav");
 
-menuToggle.addEventListener("click", () => {
+if (menuToggle && nav) {
 
-    nav.classList.toggle("active");
+    menuToggle.addEventListener("click", () => {
+        nav.classList.toggle("active");
+    });
 
-});
+}
 
 
-/* FECHAR MENU AO CLICAR EM UM LINK */
+/* ================= FECHAR MENU AO CLICAR EM UM LINK ================= */
 
 const navLinks = document.querySelectorAll(".nav a");
 
@@ -34,7 +44,9 @@ navLinks.forEach(link => {
 
     link.addEventListener("click", () => {
 
-        nav.classList.remove("active");
+        if (nav) {
+            nav.classList.remove("active");
+        }
 
     });
 
@@ -47,63 +59,84 @@ const header = document.getElementById("header");
 
 let lastScroll = 0;
 
-window.addEventListener("scroll", () => {
+if (header) {
 
-const currentScroll = window.scrollY;
+    window.addEventListener("scroll", () => {
 
-/* Efeito visual do header */
-if (currentScroll > 50) {
-    header.classList.add("scrolled");
-} else {
-    header.classList.remove("scrolled");
+        const currentScroll = window.scrollY;
+
+        /* Efeito visual do header */
+
+        if (currentScroll > 50) {
+
+            header.classList.add("scrolled");
+
+        } else {
+
+            header.classList.remove("scrolled");
+
+        }
+
+
+        /* Esconde o header ao descer */
+
+        if (currentScroll > lastScroll && currentScroll > 100) {
+
+            header.classList.add("hide");
+
+        }
+
+        /* Mostra novamente ao subir */
+
+        else {
+
+            header.classList.remove("hide");
+
+        }
+
+        lastScroll = currentScroll;
+
+    });
+
 }
-
-/* Esconde o header ao descer */
-if (currentScroll > lastScroll && currentScroll > 100) {
-    header.classList.add("hide");
-} 
-/* Mostra novamente ao subir */
-else {
-    header.classList.remove("hide");
-}
-
-lastScroll = currentScroll;
-
-});
-
 
 
 /* ================= ANIMAÇÕES ================= */
 
 const revealElements = document.querySelectorAll(".reveal");
 
-const revealObserver = new IntersectionObserver(
-    (entries) => {
+if ("IntersectionObserver" in window) {
 
-        entries.forEach(entry => {
+    const revealObserver = new IntersectionObserver(
+        (entries) => {
 
-            if (entry.isIntersecting) {
+            entries.forEach(entry => {
 
-                entry.target.classList.add("active");
+                if (entry.isIntersecting) {
 
-                revealObserver.unobserve(entry.target);
+                    entry.target.classList.add("active");
 
-            }
+                    revealObserver.unobserve(entry.target);
 
-        });
+                }
 
-    },
-    {
-        threshold: 0.12
-    }
-);
+            });
+
+        },
+        {
+            threshold: 0.12
+        }
+    );
 
 
-revealElements.forEach(element => {
+    revealElements.forEach(element => {
 
-    revealObserver.observe(element);
+        revealObserver.observe(element);
 
-});
+    });
+
+}
+
 
 /* ================= CATEGORIAS DO CARDÁPIO ================= */
 
@@ -125,7 +158,9 @@ categoryButtons.forEach(button => {
         /* Remove active dos botões */
 
         categoryButtons.forEach(btn => {
+
             btn.classList.remove("active");
+
         });
 
 
@@ -137,7 +172,9 @@ categoryButtons.forEach(button => {
         /* Esconde todas as categorias */
 
         menuCategories.forEach(category => {
+
             category.classList.remove("active");
+
         });
 
 
@@ -148,18 +185,23 @@ categoryButtons.forEach(button => {
 
 
         if (selectedMenu) {
+
             selectedMenu.classList.add("active");
+
         }
 
     });
 
 });
 
+
 /* ================= ANO AUTOMÁTICO ================= */
 
-const yearElements = document.querySelectorAll(".footer-bottom p");
+const yearElements =
+    document.querySelectorAll(".footer-bottom p");
 
-const currentYear = new Date().getFullYear();
+const currentYear =
+    new Date().getFullYear();
 
 if (yearElements.length > 0) {
 
@@ -172,7 +214,7 @@ if (yearElements.length > 0) {
 /* ================= WHATSAPP ================= */
 
 /*
-    TROQUE PELO NÚMERO REAL DO RESTAURANTE.
+    Número real do restaurante.
 
     Formato:
     5584999999999
@@ -209,47 +251,74 @@ if (whatsappButton) {
 
 document.addEventListener("keydown", (event) => {
 
-    if (event.key === "Escape") {
+    if (event.key === "Escape" && nav) {
 
         nav.classList.remove("active");
 
     }
 
-
 });
+
 
 /* ================= CARROSSEL DA GALERIA ================= */
 
-const galleryGrid = document.querySelector(".gallery-grid");
-const galleryLeft = document.querySelector(".gallery-arrow-left");
-const galleryRight = document.querySelector(".gallery-arrow-right");
+const galleryGrid =
+    document.querySelector(".gallery-grid");
+
+const galleryLeft =
+    document.querySelector(".gallery-arrow-left");
+
+const galleryRight =
+    document.querySelector(".gallery-arrow-right");
+
 
 if (galleryGrid && galleryLeft && galleryRight) {
 
     galleryRight.addEventListener("click", () => {
 
         galleryGrid.scrollBy({
+
             left: galleryGrid.clientWidth * 0.9,
+
             behavior: "smooth"
+
         });
 
     });
+
 
     galleryLeft.addEventListener("click", () => {
 
         galleryGrid.scrollBy({
+
             left: -galleryGrid.clientWidth * 0.9,
+
             behavior: "smooth"
+
         });
 
     });
+
+}
+
+
 /* ================= LIGHTBOX DA GALERIA ================= */
 
-const galleryLightbox = document.getElementById("gallery-lightbox");
-const lightboxContent = document.getElementById("lightbox-content");
-const lightboxClose = document.getElementById("lightbox-close");
-const lightboxPrev = document.getElementById("lightbox-prev");
-const lightboxNext = document.getElementById("lightbox-next");
+const galleryLightbox =
+    document.getElementById("gallery-lightbox");
+
+const lightboxContent =
+    document.getElementById("lightbox-content");
+
+const lightboxClose =
+    document.getElementById("lightbox-close");
+
+const lightboxPrev =
+    document.getElementById("lightbox-prev");
+
+const lightboxNext =
+    document.getElementById("lightbox-next");
+
 
 if (
     galleryLightbox &&
@@ -259,11 +328,13 @@ if (
     lightboxNext
 ) {
 
-    /* PEGA TODAS AS FOTOS E VÍDEOS DA GALERIA */
+    /* Pega todas as fotos e vídeos da galeria */
 
-    const galleryMedia = document.querySelectorAll(
-        ".gallery-item img, .gallery-item video"
-    );
+    const galleryMedia =
+        document.querySelectorAll(
+            ".gallery-item img, .gallery-item video"
+        );
+
 
     let currentLightboxIndex = 0;
 
@@ -272,29 +343,55 @@ if (
 
     function showLightboxMedia(index) {
 
+        if (galleryMedia.length === 0) {
+
+            return;
+
+        }
+
+
         /* Faz a navegação circular */
 
         if (index < 0) {
+
             index = galleryMedia.length - 1;
+
         }
+
 
         if (index >= galleryMedia.length) {
+
             index = 0;
+
         }
 
+
         currentLightboxIndex = index;
+
 
         /* Limpa o conteúdo anterior */
 
         lightboxContent.innerHTML = "";
 
+
         /* Pega a mídia atual */
 
-        const media = galleryMedia[currentLightboxIndex];
+        const media =
+            galleryMedia[currentLightboxIndex];
+
+
+        if (!media) {
+
+            return;
+
+        }
+
 
         /* Cria uma cópia */
 
-        const clone = media.cloneNode(true);
+        const clone =
+            media.cloneNode(true);
+
 
         /* Configuração especial para vídeos */
 
@@ -306,6 +403,7 @@ if (
             clone.loop = false;
 
         }
+
 
         /* Coloca a mídia no Lightbox */
 
@@ -339,7 +437,9 @@ if (
 
         event.stopPropagation();
 
-        showLightboxMedia(currentLightboxIndex - 1);
+        showLightboxMedia(
+            currentLightboxIndex - 1
+        );
 
     });
 
@@ -349,10 +449,11 @@ if (
     lightboxNext.addEventListener("click", (event) => {
 
         event.stopPropagation();
-        showLightboxMedia(currentLightboxIndex + 1);
 
+        showLightboxMedia(
+            currentLightboxIndex + 1
+        );
 
-        
     });
 
 
@@ -395,8 +496,11 @@ if (
     document.addEventListener("keydown", (event) => {
 
         if (!galleryLightbox.classList.contains("active")) {
+
             return;
+
         }
+
 
         /* ESC */
 
@@ -406,165 +510,476 @@ if (
 
         }
 
+
         /* SETA ESQUERDA DO TECLADO */
 
         if (event.key === "ArrowLeft") {
 
-            showLightboxMedia(currentLightboxIndex - 1);
+            showLightboxMedia(
+                currentLightboxIndex - 1
+            );
 
         }
+
 
         /* SETA DIREITA DO TECLADO */
 
         if (event.key === "ArrowRight") {
 
-            showLightboxMedia(currentLightboxIndex + 1);
+            showLightboxMedia(
+                currentLightboxIndex + 1
+            );
 
         }
 
-   
-});  
+    });
 
 }
 
-}
 
-// ================= AVALIAÇÃO POR ESTRELAS =================
+/* ================= AVALIAÇÃO POR ESTRELAS ================= */
 
-const ratingButtons = document.querySelectorAll("#rating button");
+const ratingButtons =
+    document.querySelectorAll("#rating button");
 
 let selectedRating = 0;
+
 
 ratingButtons.forEach((button) => {
 
     button.addEventListener("click", () => {
 
-        const clickedRating = Number(button.dataset.rating);
+        const clickedRating =
+            Number(button.dataset.rating);
 
-        // Se clicar novamente na mesma estrela, limpa a avaliação
+
+        /* Se clicar novamente na mesma estrela,
+           limpa a avaliação */
+
         if (selectedRating === clickedRating) {
+
             selectedRating = 0;
+
         } else {
+
             selectedRating = clickedRating;
+
         }
+
 
         ratingButtons.forEach((star) => {
 
-            const starRating = Number(star.dataset.rating);
+            const starRating =
+                Number(star.dataset.rating);
+
 
             if (starRating <= selectedRating) {
+
                 star.classList.add("active");
+
             } else {
+
                 star.classList.remove("active");
+
             }
 
         });
 
     });
+
 });
 
 
-// ================= ENVIO DA AVALIAÇÃO =================
+/* ================= ENVIO DA AVALIAÇÃO ================= */
 
-const reviewForm = document.getElementById("review-form");
-const reviewName = document.getElementById("review-name");
-const reviewMessage = document.getElementById("review-message");
+const reviewForm =
+    document.getElementById("review-form");
+
+const reviewName =
+    document.getElementById("review-name");
+
+const reviewMessage =
+    document.getElementById("review-message");
+
+const reviewModal =
+    document.getElementById("review-modal");
+
+const reviewModalClose =
+    document.getElementById("review-modal-close");
+
+const reviewModalButton =
+    document.getElementById("review-modal-button");
+
+const reviewModalOverlay =
+    document.querySelector(".review-modal-overlay");
+
 
 let enviandoAvaliacao = false;
 
-reviewForm.addEventListener("submit", async (event) => {
 
-    event.preventDefault();
+if (
+    reviewForm &&
+    reviewName &&
+    reviewMessage &&
+    supabaseClient
+) {
 
-    if (enviandoAvaliacao) {
-        return;
-    }
+    reviewForm.addEventListener("submit", async (event) => {
 
-    if (selectedRating === 0) {
-        alert("Selecione uma nota de 1 a 5 estrelas.");
-        return;
-    }
+        event.preventDefault();
 
-    enviandoAvaliacao = true;
 
-    const { error } = await supabaseClient
-        .from("avaliacoes")
-        .insert([
-            {
-                nome: reviewName.value.trim(),
-                nota: selectedRating,
-                comentario: reviewMessage.value.trim(),
-                status: "pendente",
-                created_at: new Date().toISOString()
-            }
-        ]);
+        if (enviandoAvaliacao) {
 
-    if (error) {
-        console.error("Erro ao enviar avaliação:", error);
-        alert("Não foi possível enviar sua avaliação. Tente novamente.");
+            return;
+
+        }
+
+
+        /* Verifica se uma estrela foi selecionada */
+
+        if (selectedRating === 0) {
+
+            alert(
+                "Selecione uma nota de 1 a 5 estrelas."
+            );
+
+            return;
+
+        }
+
+
+        /* Verifica nome e comentário */
+
+        if (
+            reviewName.value.trim() === "" ||
+            reviewMessage.value.trim() === ""
+        ) {
+
+            alert(
+                "Preencha seu nome e seu comentário."
+            );
+
+            return;
+
+        }
+
+
+        enviandoAvaliacao = true;
+
+
+        const { error } =
+            await supabaseClient
+                .from("avaliacoes")
+                .insert([
+                    {
+                        nome: reviewName.value.trim(),
+
+                        nota: selectedRating,
+
+                        comentario:
+                            reviewMessage.value.trim(),
+
+                        status: "pendente",
+
+                        created_at:
+                            new Date().toISOString()
+                    }
+                ]);
+
+
+        /* Se houver erro */
+
+        if (error) {
+
+            console.error(
+                "Erro ao enviar avaliação:",
+                error
+            );
+
+            alert(
+                "Não foi possível enviar sua avaliação. Tente novamente."
+            );
+
+            enviandoAvaliacao = false;
+
+            return;
+
+        }
+
+
+        /* Mostra o modal somente se ele existir */
+
+        if (reviewModal) {
+
+            reviewModal.classList.add("active");
+
+            reviewModal.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+        }
+
+
+        /* Limpa o formulário */
+
+        reviewForm.reset();
+
+
+        /* Limpa a nota selecionada */
+
+        selectedRating = 0;
+
+
+        ratingButtons.forEach((star) => {
+
+            star.classList.remove("active");
+
+        });
+
+
         enviandoAvaliacao = false;
-        return;
-    }
 
-    alert("Obrigado pela sua avaliação!");
-
-    reviewForm.reset();
-
-    selectedRating = 0;
-
-    ratingButtons.forEach((star) => {
-        star.classList.remove("active");
     });
 
-    enviandoAvaliacao = false;
-});
 
-// ================= CARREGAR AVALIAÇÕES APROVADAS =================
+    /* ================= FECHAR MODAL DE AVALIAÇÃO ================= */
 
-const approvedReviews = document.getElementById("approved-reviews");
+    function fecharReviewModal() {
+
+        if (reviewModal) {
+
+            reviewModal.classList.remove("active");
+
+            reviewModal.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+        }
+
+
+        if (document.activeElement) {
+
+            document.activeElement.blur();
+
+        }
+
+    }
+
+
+    if (reviewModalClose) {
+
+        reviewModalClose.addEventListener(
+            "click",
+            fecharReviewModal
+        );
+
+    }
+
+
+    if (reviewModalButton) {
+
+        reviewModalButton.addEventListener(
+            "click",
+            fecharReviewModal
+        );
+
+    }
+
+
+    if (reviewModalOverlay) {
+
+        reviewModalOverlay.addEventListener(
+            "click",
+            fecharReviewModal
+        );
+
+    }
+
+}
+
+
+/* ================= CARREGAR AVALIAÇÕES APROVADAS ================= */
+
+const approvedReviews =
+    document.getElementById("approved-reviews");
+
 
 async function carregarAvaliacoes() {
 
-    if (!approvedReviews) {
+    if (
+        !approvedReviews ||
+        !supabaseClient
+    ) {
+
         return;
+
     }
 
-    const { data, error } = await supabaseClient
-        .from("avaliacoes")
-        .select("nome, nota, comentario, created_at")
-        .eq("status", "aprovada")
-        .order("created_at", { ascending: false });
+
+    const { data, error } =
+        await supabaseClient
+            .from("avaliacoes")
+            .select(
+                "nome, nota, comentario, created_at"
+            )
+            .eq("status", "aprovada")
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
 
     if (error) {
-        console.error("Erro ao carregar avaliações:", error);
+
+        console.error(
+            "Erro ao carregar avaliações:",
+            error
+        );
+
         return;
+
     }
+
 
     approvedReviews.innerHTML = "";
 
+
+    if (!data || data.length === 0) {
+
+        return;
+
+    }
+
+
     data.forEach((avaliacao) => {
 
-        const review = document.createElement("div");
-        review.classList.add("approved-review");
+        const review =
+            document.createElement("div");
 
-        const stars = "★".repeat(avaliacao.nota);
-        const dataFormatada = new Date(avaliacao.created_at).toLocaleDateString(
-    "pt-BR"
-);
-review.innerHTML = `
-    <div class="approved-review-header">
-        <strong>${avaliacao.nome}</strong>
-        <span class="approved-review-stars">${stars}</span>
-    </div>
 
-    <p>${avaliacao.comentario}</p>
+        review.classList.add(
+            "approved-review"
+        );
 
-    <small class="approved-review-date">${dataFormatada}</small>
-`;
-        approvedReviews.appendChild(review);
+
+        const nota =
+            Number(avaliacao.nota);
+
+
+        const stars =
+            "★".repeat(
+                Math.max(
+                    0,
+                    Math.min(5, nota)
+                )
+            );
+
+
+        const dataFormatada =
+            avaliacao.created_at
+                ? new Date(
+                    avaliacao.created_at
+                ).toLocaleDateString("pt-BR")
+                : "";
+
+
+        /* ================= CABEÇALHO ================= */
+
+        const reviewHeader =
+            document.createElement("div");
+
+
+        reviewHeader.classList.add(
+            "approved-review-header"
+        );
+
+
+        /* ================= NOME ================= */
+
+        const name =
+            document.createElement("strong");
+
+
+        name.textContent =
+            avaliacao.nome || "Cliente";
+
+
+        /* ================= ESTRELAS ================= */
+
+        const starsElement =
+            document.createElement("span");
+
+
+        starsElement.classList.add(
+            "approved-review-stars"
+        );
+
+
+        starsElement.textContent =
+            stars;
+
+
+        reviewHeader.appendChild(name);
+
+        reviewHeader.appendChild(
+            starsElement
+        );
+
+
+        /* ================= COMENTÁRIO ================= */
+
+        const comment =
+            document.createElement("p");
+
+
+        comment.textContent =
+            avaliacao.comentario || "";
+
+
+        /* ================= DATA ================= */
+
+        const date =
+            document.createElement("small");
+
+
+        date.classList.add(
+            "approved-review-date"
+        );
+
+
+        date.textContent =
+            dataFormatada;
+
+
+        /* ================= MONTA A AVALIAÇÃO ================= */
+
+        review.appendChild(
+            reviewHeader
+        );
+
+        review.appendChild(
+            comment
+        );
+
+        review.appendChild(
+            date
+        );
+
+
+        approvedReviews.appendChild(
+            review
+        );
 
     });
 
 }
+
+
+/* ================= INICIAR AVALIAÇÕES ================= */
 
 carregarAvaliacoes();
