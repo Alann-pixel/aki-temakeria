@@ -229,7 +229,7 @@ if (yearElements.length > 0) {
 const whatsappNumber = "5584991841279";
 
 const whatsappMessage =
-    "Olá! Vim pelo site da Aki Temakeria e gostaria de fazer um pedido.";
+    "Olá! Vim pelo site do Aki Temakeria e gostaria de fazer um pedido.";
 
 
 const whatsappLink =
