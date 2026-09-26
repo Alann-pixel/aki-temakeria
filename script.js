@@ -29,9 +29,13 @@ const nav = document.getElementById("nav");
 
 if (menuToggle && nav) {
 
-    menuToggle.addEventListener("click", () => {
-        nav.classList.toggle("active");
-    });
+   menuToggle.addEventListener("click", () => {
+    nav.classList.toggle("active");
+
+    const menuAberto = nav.classList.contains("active");
+
+    menuToggle.setAttribute("aria-expanded", menuAberto);
+});
 
 }
 
